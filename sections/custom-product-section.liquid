@@ -1,5 +1,5 @@
 <!-- product-section.liquid -->
-<!-- product-section.liquid -->
+
 <section class="product-section">
   <div class="section-heading">
     <h2>{{ section.settings.heading }}</h2>
@@ -50,11 +50,12 @@
     <div class="modal-flex-2">
       <h2 class="modal-label">Size</h2>
       <select id="size-dropdown">
-        <option value="x-small">XS</option>
-        <option value="small">S</option>
-        <option value="medium">M</option>
-        <option value="large">L</option>
-        <option value="x-large">XL</option>
+        <option value="">Select Size</option> <!-- Optional default option -->
+        <option value="XS">XS</option>
+        <option value="S">S</option>
+        <option value="M">M</option>
+        <option value="L">L</option>
+        <option value="XL">XL</option>
       </select>
     </div>
 
@@ -357,21 +358,27 @@
   }
 
   function updateSelectedVariant() {
-    const selectedColorButton = document.querySelector('.variant-btn[style*="background-color: black"]');
-    const selectedColor = selectedColorButton ? selectedColorButton.innerText : null;
-    const selectedSize = document.getElementById('size-dropdown').value;
+  const selectedColorButton = document.querySelector('.variant-btn[style*="background-color: black"]');
+  const selectedColor = selectedColorButton ? selectedColorButton.innerText : null;
+  const selectedSize = document.getElementById('size-dropdown').value;
 
-    // Find the variant that matches the selected color and size
-    const selectedVariant = window.currentProductVariants.find(variant => {
-      return variant.option1 === selectedSize && variant.option2 === selectedColor;
-    });
+  console.log('Selected Color:', selectedColor);
+  console.log('Selected Size:', selectedSize);
 
-    if (selectedVariant) {
-      document.getElementById('selected-variant').value = selectedVariant.id;
-    } else {
-      document.getElementById('selected-variant').value = '';
-    }
+  // Find the variant that matches the selected color and size
+  const selectedVariant = window.currentProductVariants.find(variant => {
+    console.log('Checking Variant:', variant);
+    return variant.option1 === selectedSize && variant.option2 === selectedColor;
+  });
+
+  console.log('Selected Variant:', selectedVariant);
+
+  if (selectedVariant) {
+    document.getElementById('selected-variant').value = selectedVariant.id;
+  } else {
+    document.getElementById('selected-variant').value = '';
   }
+}
 
   // Update selected variant when size changes
   document.getElementById('size-dropdown').addEventListener('change', updateSelectedVariant);
