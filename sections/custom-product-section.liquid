@@ -5,7 +5,12 @@
   </div>
   <div class="product-grid">
     {% for product in collections[section.settings.collection_handle].products %}
-      <div class="product-item" data-product='{{ product | json | escape }}'>
+      <div class="product-item"
+           data-title="{{ product.title | escape }}"
+           data-price="{{ product.price }}"
+           data-description="{{ product.description | escape }}"
+           data-image-url="{{ product.featured_image.src | escape }}"
+           data-variants='{{ product.variants | json | escape }}'>
         <img src="{{ product.featured_image | img_url: '300x300' }}" alt="{{ product.title }}" width="300" height="300">
         <div class="plus-sign" onclick="event.stopPropagation(); openModalFromElement(this)">+</div>
         <a href="{{ product.url }}"></a>
@@ -57,6 +62,7 @@
     <button class="add-to-cart">ADD TO CART →</button>
   </div>
 </div>
+
 
 <style>
   .modal-label {
@@ -279,15 +285,21 @@
 
   function openModalFromElement(element) {
     const productItem = element.closest('.product-item');
-    const productDataJson = productItem.getAttribute('data-product');
-    const product = JSON.parse(productDataJson);
+    const product = {
+      title: productItem.getAttribute('data-title'),
+      price: productItem.getAttribute('data-price'),
+      description: productItem.getAttribute('data-description'),
+      imageUrl: productItem.getAttribute('data-image-url'),
+      variants: JSON.parse(productItem.getAttribute('data-variants'))
+    };
     openModal(product);
   }
 
   function openModal(product) {
+    console.log('Product Data:', product); // Log product data for debugging
+
     // Set product image
-    const imageUrl = product.images && product.images.length > 0 ? product.images[0] : '';
-    document.getElementById('modal-image').src = imageUrl;
+    document.getElementById('modal-image').src = product.imageUrl || '';
 
     // Set product title
     document.getElementById('modal-title').innerText = product.title;
@@ -301,29 +313,32 @@
     // Display the modal
     document.getElementById('orderModal').style.display = 'block';
 
-    // Dynamically add the variant buttons
+    // Dynamically add the variant buttons for Color
     const variantContainer = document.querySelector('.color-flex');
     variantContainer.innerHTML = ''; // Clear any existing buttons
 
-    if (product.variants && product.variants.length > 0) {
-      product.variants.forEach(variant => {
-        const button = document.createElement('button');
-        button.className = 'variant-btn';
-        button.dataset.color = variant.option2 ? variant.option2.toLowerCase() : '';
-        button.dataset.variantId = variant.id;
-        button.innerText = variant.option1 || 'Default';
-        button.onclick = () => selectVariant(button, variant.id);
+    // Get unique colors from variants
+    const colors = [...new Set(product.variants.map(variant => variant.option2))];
 
-        // Set the border color to match the variant's color
-        button.style.borderColor = variant.option2 ? variant.option2.toLowerCase() : '#000';
+    colors.forEach(color => {
+      const button = document.createElement('button');
+      button.className = 'variant-btn';
+      button.dataset.color = color ? color.toLowerCase() : '';
+      button.innerText = color || 'Default';
+      button.onclick = () => selectColor(button, color);
 
-        // Append the button to the variant container
-        variantContainer.appendChild(button);
-      });
-    }
+      // Set the border color to match the color option
+      button.style.borderColor = color ? color.toLowerCase() : '#000';
+
+      // Append the button to the variant container
+      variantContainer.appendChild(button);
+    });
+
+    // Store the variants for later use
+    window.currentProductVariants = product.variants;
   }
 
-  function selectVariant(button, variantId) {
+  function selectColor(button, selectedColor) {
     // Deselect all buttons
     const buttons = document.querySelectorAll('.variant-btn');
     buttons.forEach(btn => {
@@ -335,9 +350,29 @@
     button.style.backgroundColor = 'black';
     button.style.color = 'white';
 
-    // Store the selected variant ID
-    document.getElementById('selected-variant').value = variantId;
+    // Update the selected variant based on the selected color and size
+    updateSelectedVariant();
   }
+
+  function updateSelectedVariant() {
+    const selectedColorButton = document.querySelector('.variant-btn[style*="background-color: black"]');
+    const selectedColor = selectedColorButton ? selectedColorButton.innerText : null;
+    const selectedSize = document.getElementById('size-dropdown').value;
+
+    // Find the variant that matches the selected color and size
+    const selectedVariant = window.currentProductVariants.find(variant => {
+      return variant.option1 === selectedSize && variant.option2 === selectedColor;
+    });
+
+    if (selectedVariant) {
+      document.getElementById('selected-variant').value = selectedVariant.id;
+    } else {
+      document.getElementById('selected-variant').value = '';
+    }
+  }
+
+  // Update selected variant when size changes
+  document.getElementById('size-dropdown').addEventListener('change', updateSelectedVariant);
 
   function closeModal() {
     document.getElementById('orderModal').style.display = 'none';
