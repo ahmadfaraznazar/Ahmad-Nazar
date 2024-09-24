@@ -39,9 +39,16 @@
     <div class="modal-flex-2">
       <h2 class="modal-label">Color</h2>
       <div class="color-flex">
-        <button class="color-1">Red</button>
-        <button class="color-2">White</button>
-      </div>
+  {% for variant in product.variants %}
+    <button class="variant-btn"
+            data-color="{{ variant.option2 | downcase }}"
+            data-variant-id="{{ variant.id }}"
+            onclick="selectVariant(this, '{{ variant.id }}')">
+      {{ variant.option1 }} <!-- Assuming option1 is the variant name -->
+    </button>
+  {% endfor %}
+</div>
+
     </div>
 
     <!-- Modal Section 3: Choose the size -->
@@ -56,6 +63,8 @@
         <option value="x-large">XL</option>
       </select>
     </div>
+
+    <input type="hidden" id="selected-variant" value="">
 
     <!-- Add to card button -->
     <button class="add-to-cart">ADD TO CART →</button>
@@ -97,25 +106,25 @@
     object-fit: cover;
   }
 
-  .color-1 , .color-2 {
-    border: none;
-    width: 129px;
-    height: 40.5px;
-    border-left: 6px;
-    border-color: goldenrod; /* Placeholder Color */
-    font-size: 18px;
-    font-family: 'jost';
+  .variant-btn {
+  border: 2px solid; /* Add border */
+  width: 129px;
+  height: 40.5px;
+  font-size: 18px;
+  font-family: 'jost';
+  margin: 5px;
+  cursor: pointer;
+}
 
-  }
+.variant-btn:hover {
+  background-color: #888;
+}
 
-  .color-1:hover , .color-2:hover {
-    background-color: #888;
-  }
+.variant-btn:focus {
+  background-color: #000;
+  color: white;
+}
 
-  .color-1:focus , .color-2:focus {
-    background-color: #000;
-    color:white;
-  }
 
   .modal-flex-1 {
     display: flex;
@@ -287,6 +296,24 @@
     document.getElementById('modal-description').innerText = description;
     document.getElementById('orderModal').style.display = 'block';
   }
+
+  function selectVariant(button, variantId) {
+  // Deselect all buttons
+  const buttons = document.querySelectorAll('.variant-btn');
+
+  button.style.borderColor = button.getAttribute('data-color');
+  buttons.forEach(btn => {
+    btn.style.backgroundColor = '';  // Reset background color
+    btn.style.color = '';  // Reset text color
+  });
+  
+  // Select the clicked button
+  button.style.backgroundColor = 'black';  // Dark background when selected
+  button.style.color = 'white';  // White text when selected
+
+  // Store the selected variant ID (you can send this ID when adding to cart)
+  document.getElementById('selected-variant').value = variantId;
+}
 
   function closeModal() {
     document.getElementById('orderModal').style.display = 'none';
