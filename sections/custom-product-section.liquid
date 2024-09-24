@@ -7,7 +7,16 @@
     {% for product in collections[section.settings.collection_handle].products %}
       <div class="product-item">
         <img src="{{ product.featured_image | img_url: '300x300' }}" alt="{{ product.title }}" width="300" height="300">
-        <div class="plus-sign" onclick="event.stopPropagation(); openModal('{{ product.title }}', '{{ product.price | money }}', '{{ product.description | escape }}', '{{ product.images.first | img_url: '300x300' }}, {{ product.variants | json }}')">+</div>
+        <div class="plus-sign" 
+     onclick="event.stopPropagation(); openModal(
+       '{{ product.title }}', 
+       '{{ product.price | money }}', 
+       '{{ product.description | escape }}', 
+       '{{ product.images.first | img_url: '300x300' }}', 
+       {{ product.variants | json }}
+     )">
+  +
+</div>
         <a href="{{ product.url }}">
         </a>
       </div> 
