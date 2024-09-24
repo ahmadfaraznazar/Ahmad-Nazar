@@ -7,7 +7,7 @@
     {% for product in collections[section.settings.collection_handle].products %}
       <div class="product-item">
         <img src="{{ product.featured_image | img_url: '300x300' }}" alt="{{ product.title }}" width="300" height="300">
-        <div class="plus-sign" onclick="event.stopPropagation(); openModal('{{ product.title }}', '{{ product.price | money }}', '{{ product.description | escape }}', '{{ product.images.first | img_url: '300x300' }}')">+</div>
+        <div class="plus-sign" onclick="event.stopPropagation(); openModal('{{ product.title }}', '{{ product.price | money }}', '{{ product.description | escape }}', '{{ product.images.first | img_url: '300x300' }}, {{ product.variants | json }}')">+</div>
         <a href="{{ product.url }}">
         </a>
       </div> 
@@ -289,31 +289,49 @@
 </style>
 
 <script>
-  function openModal(title, price, description, imageUrl) {
+  function openModal(title, price, description, imageUrl, variants) {
     document.getElementById('modal-image').src = imageUrl;
     document.getElementById('modal-title').innerText = title;
     document.getElementById('modal-price').innerText = price;
     document.getElementById('modal-description').innerText = description;
     document.getElementById('orderModal').style.display = 'block';
+
+    // Dynamically add the variant buttons
+    const variantContainer = document.querySelector('.color-flex');
+    variantContainer.innerHTML = ''; // Clear any existing buttons
+
+    // Loop through the variants and create buttons
+    variants.forEach(variant => {
+      const button = document.createElement('button');
+      button.className = 'variant-btn';
+      button.dataset.color = variant.option2.toLowerCase(); // Assuming option2 is the color
+      button.dataset.variantId = variant.id;
+      button.innerText = variant.option1; // Assuming option1 is the variant name
+      button.onclick = () => selectVariant(button, variant.id);
+      
+      // Set the border color to match the variant's color
+      button.style.borderColor = variant.option2.toLowerCase();
+
+      // Append the button to the variant container
+      variantContainer.appendChild(button);
+    });
   }
 
   function selectVariant(button, variantId) {
-  // Deselect all buttons
-  const buttons = document.querySelectorAll('.variant-btn');
+    // Deselect all buttons
+    const buttons = document.querySelectorAll('.variant-btn');
+    buttons.forEach(btn => {
+      btn.style.backgroundColor = '';  // Reset background color
+      btn.style.color = '';  // Reset text color
+    });
+    
+    // Select the clicked button
+    button.style.backgroundColor = 'black';  // Dark background when selected
+    button.style.color = 'white';  // White text when selected
 
-  button.style.borderColor = button.getAttribute('data-color');
-  buttons.forEach(btn => {
-    btn.style.backgroundColor = '';  // Reset background color
-    btn.style.color = '';  // Reset text color
-  });
-  
-  // Select the clicked button
-  button.style.backgroundColor = 'black';  // Dark background when selected
-  button.style.color = 'white';  // White text when selected
-
-  // Store the selected variant ID (you can send this ID when adding to cart)
-  document.getElementById('selected-variant').value = variantId;
-}
+    // Store the selected variant ID
+    document.getElementById('selected-variant').value = variantId;
+  }
 
   function closeModal() {
     document.getElementById('orderModal').style.display = 'none';
