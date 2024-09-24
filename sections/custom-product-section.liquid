@@ -1,4 +1,4 @@
-<!-- product-section.liquid -->
+<!-- Section 3 -->
 
 <section class="product-section">
   <div class="section-heading">
@@ -21,7 +21,6 @@
 </section>
 
 
-<!-- Modal for ordering -->
 <div id="orderModal" class="modal">
   <div class="modal-content">
     <span class="close" onclick="closeModal()">&times;</span>
@@ -42,7 +41,7 @@
     <div class="modal-flex-2">
       <h2 class="modal-label">Color</h2>
       <div class="color-flex">
-        <!-- Variant buttons will be added here by JavaScript -->
+        <!-- Added By JS -->
       </div>
     </div>
 
@@ -50,7 +49,7 @@
     <div class="modal-flex-2">
       <h2 class="modal-label">Size</h2>
       <select id="size-dropdown">
-        <option value="">Select Size</option> <!-- Optional default option -->
+        <option value="">Select Size</option> 
         <option value="XS">XS</option>
         <option value="S">S</option>
         <option value="M">M</option>
@@ -311,26 +310,16 @@
   function openModal(product) {
     console.log('Product Data:', product); // Log product data for debugging
 
-    // Set product image
     document.getElementById('modal-image').src = product.imageUrl || '';
 
-    // Set product title
     document.getElementById('modal-title').innerText = product.title;
-
-    // Set product price
     document.getElementById('modal-price').innerText = formatMoney(product.price);
-
-    // Set product description
     document.getElementById('modal-description').innerHTML = product.description;
 
-    // Display the modal
     document.getElementById('orderModal').style.display = 'block';
-
-    // Dynamically add the variant buttons for Color
     const variantContainer = document.querySelector('.color-flex');
-    variantContainer.innerHTML = ''; // Clear any existing buttons
+    variantContainer.innerHTML = ''; 
 
-    // Get unique colors from variants
     const colors = [...new Set(product.variants.map(variant => variant.option2))];
 
     colors.forEach(color => {
@@ -340,30 +329,25 @@
       button.innerText = color || 'Default';
       button.onclick = () => selectColor(button, color);
 
-      // Set the border color to match the color option
       button.style.borderColor = color ? color.toLowerCase() : '#000';
 
-      // Append the button to the variant container
       variantContainer.appendChild(button);
     });
 
-    // Store the variants for later use
+
     window.currentProductVariants = product.variants;
   }
 
   function selectColor(button, selectedColor) {
-    // Deselect all buttons
     const buttons = document.querySelectorAll('.variant-btn');
     buttons.forEach(btn => {
       btn.style.backgroundColor = '';
       btn.style.color = '';
     });
 
-    // Select the clicked button
     button.style.backgroundColor = 'black';
     button.style.color = 'white';
 
-    // Update the selected variant based on the selected color and size
     updateSelectedVariant();
   }
 
@@ -374,8 +358,7 @@
 
   console.log('Selected Color:', selectedColor);
   console.log('Selected Size:', selectedSize);
-
-  // Find the variant that matches the selected color and size
+  
   const selectedVariant = window.currentProductVariants.find(variant => {
     console.log('Checking Variant:', variant);
     return variant.option1 === selectedSize && variant.option2 === selectedColor;
@@ -390,19 +373,15 @@
   }
 }
 
-  // Update selected variant when size changes
   document.getElementById('size-dropdown').addEventListener('change', updateSelectedVariant);
 
   function closeModal() {
     document.getElementById('orderModal').style.display = 'none';
   }
 
-  // ... (existing JavaScript functions)
-
-// Add this at the end of your script
 document.querySelector('.add-to-cart').addEventListener('click', function() {
   const variantId = document.getElementById('selected-variant').value;
-  const quantity = 1; // You can adjust this or retrieve from a quantity selector if added
+  const quantity = 1; 
 
   if (variantId) {
     addToCart(variantId, quantity);
@@ -424,7 +403,7 @@ function addToCart(variantId, quantity) {
   })
   .then(response => response.json())
   .then(data => {
-    // You can update the cart UI here or display a success message
+    
     alert('Item added to cart!');
     closeModal();
   })
