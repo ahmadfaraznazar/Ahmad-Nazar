@@ -1,4 +1,5 @@
 <!-- product-section.liquid -->
+<!-- product-section.liquid -->
 <section class="product-section">
   <div class="section-heading">
     <h2>{{ section.settings.heading }}</h2>
@@ -9,7 +10,7 @@
            data-title="{{ product.title | escape }}"
            data-price="{{ product.price }}"
            data-description="{{ product.description | escape }}"
-           data-image-url="{{ product.featured_image.src | escape }}"
+           data-image-url="{{ product.featured_image | img_url: '300x300' | escape }}"
            data-variants='{{ product.variants | json | escape }}'>
         <img src="{{ product.featured_image | img_url: '300x300' }}" alt="{{ product.title }}" width="300" height="300">
         <div class="plus-sign" onclick="event.stopPropagation(); openModalFromElement(this)">+</div>
@@ -18,6 +19,7 @@
     {% endfor %}
   </div>
 </section>
+
 
 <!-- Modal for ordering -->
 <div id="orderModal" class="modal">
@@ -377,6 +379,44 @@
   function closeModal() {
     document.getElementById('orderModal').style.display = 'none';
   }
+
+  // ... (existing JavaScript functions)
+
+// Add this at the end of your script
+document.querySelector('.add-to-cart').addEventListener('click', function() {
+  const variantId = document.getElementById('selected-variant').value;
+  const quantity = 1; // You can adjust this or retrieve from a quantity selector if added
+
+  if (variantId) {
+    addToCart(variantId, quantity);
+  } else {
+    alert('Please select a color and size before adding to cart.');
+  }
+});
+
+function addToCart(variantId, quantity) {
+  fetch('/cart/add.js', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      id: variantId,
+      quantity: quantity
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    // You can update the cart UI here or display a success message
+    alert('Item added to cart!');
+    closeModal();
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+    alert('There was an error adding the item to the cart.');
+  });
+}
+
 </script>
 
 {% schema %}
