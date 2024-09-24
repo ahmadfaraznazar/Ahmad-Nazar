@@ -1,5 +1,4 @@
 <!-- product-section.liquid -->
-
 <section class="product-section">
   <div class="section-heading">
     <h2>{{ section.settings.heading }}</h2>
@@ -7,10 +6,12 @@
   <div class="product-grid">
     {% for product in collections[section.settings.collection_handle].products %}
       <div class="product-item" data-product='{{ product | json | escape }}'>
-        <img src="{{ product.featured_image | img_url: '300x300' }}" alt="{{ product.title }}" width="300" height="300">
-        <div class="plus-sign" onclick="event.stopPropagation(); openModalFromElement(this)">+</div>
-        <a href="{{ product.url }}"></a>
-      </div>
+  <img src="{{ product.featured_image | img_url: '300x300' }}" alt="{{ product.title }}" width="300" height="300">
+  <div class="plus-sign" onclick="event.stopPropagation(); openModalFromElement(this)">
+    +
+  </div>
+  <a href="{{ product.url }}"></a>
+</div> 
     {% endfor %}
   </div>
 </section>
@@ -21,26 +22,30 @@
     <span class="close" onclick="closeModal()">&times;</span>
 
     <!-- Modal First Section: Description -->
-    <div class="modal-flex-1">
-      <div class="modal-img-container">
-        <img id="modal-image" src="" alt="" width="120" height="140">
-      </div>
-      <div class="modal-text-container">
-        <h2 id="modal-title"></h2>
-        <p id="modal-price"></p>
-        <p id="modal-description"></p>
-      </div>
-    </div>
+<div class="modal-flex-1">
+  <div class="modal-img-container">
+    <img id='modal-image' src="" alt="" width="120" height="140">
+  </div>
+  <div class="modal-text-container">
+    <h2 id="modal-title"></h2>
+    <p id="modal-price"></p>
+    <p id="modal-description"></p>
+  </div>
+</div>
 
-    <!-- Modal Section 2: Color Picker -->
-    <div class="modal-flex-2">
-      <h2 class="modal-label">Color</h2>
-      <div class="color-flex">
-        <!-- Variant buttons will be added here by JavaScript -->
-      </div>
+<!-- Modal Section 2: Color Picker -->
+<div class="modal-flex-2">
+  <h2 class="modal-label">Color</h2>
+  <div class="color-flex">
+    <!-- Variant buttons will be added here by JavaScript -->
+  </div>
+</div>
+
+
     </div>
 
     <!-- Modal Section 3: Choose the size -->
+
     <div class="modal-flex-2">
       <h2 class="modal-label">Size</h2>
       <select id="size-dropdown">
@@ -54,7 +59,7 @@
 
     <input type="hidden" id="selected-variant" value="">
 
-    <!-- Add to cart button -->
+    <!-- Add to card button -->
     <button class="add-to-cart">ADD TO CART →</button>
   </div>
 </div>
@@ -76,10 +81,11 @@
   }
 
   #modal-price {
-    font-family: 'Lustria';
-    font-weight: bold;
-    font-size: 16px;
-    color: #000;
+
+  font-family: 'Lustria';
+  font-weight: bold;
+  font-size: 16px;
+  color: #000;
   }
 
   #modal-description {
@@ -87,30 +93,31 @@
     font-weight: lighter;
     font-size: 12px;
     color: #000;
-  }
 
+  }
   .modal-image {
     object-fit: cover;
   }
 
   .variant-btn {
-    border: 2px solid;
-    width: 129px;
-    height: 40.5px;
-    font-size: 18px;
-    font-family: 'jost';
-    margin: 5px;
-    cursor: pointer;
-  }
+  border: 2px solid; /* Add border */
+  width: 129px;
+  height: 40.5px;
+  font-size: 18px;
+  font-family: 'jost';
+  margin: 5px;
+  cursor: pointer;
+}
 
-  .variant-btn:hover {
-    background-color: #888;
-  }
+.variant-btn:hover {
+  background-color: #888;
+}
 
-  .variant-btn:focus {
-    background-color: #000;
-    color: white;
-  }
+.variant-btn:focus {
+  background-color: #000;
+  color: white;
+}
+
 
   .modal-flex-1 {
     display: flex;
@@ -124,14 +131,14 @@
   }
 
   .add-to-cart {
-    border: none;
-    padding: 12px 75px;
-    background-color: #000;
-    color: #fff;
-    margin-top: 50px;
-    font-size: 16px;
-    font-family: 'jost';
-    width: 100%;
+      border: none;
+      padding: 12px 75px;
+      background-color: #000;
+      color: #fff;
+      margin-top: 50px;
+      font-size: 16px ;
+      font-family: 'jost';
+      width: 100%;
   }
 
   .product-section {
@@ -157,7 +164,7 @@
   .product-item {
     background-color: white;
     text-align: center;
-    position: relative;
+    position: relative; /* Added for positioning the plus sign */
   }
 
   .product-item img {
@@ -168,23 +175,23 @@
 
   .plus-sign {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 10px; /* Adjust as needed */
+    right: 10px; /* Adjust as needed */
     background-color: white;
     border-radius: 50%;
-    width: 22px;
-    height: 22px;
+    width: 22px; /* Size of the plus sign */
+    height: 22px; /* Size of the plus sign */
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    font-size: 24px;
-    color: #000;
+    font-size: 24px; /* Font size of the plus */
+    color: #000; /* Color of the plus */
   }
 
   /* Modal styles */
   .modal {
-    display: none;
+    display: none; /* Hidden by default */
     position: fixed;
     z-index: 1;
     left: 0;
@@ -192,7 +199,8 @@
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0,0,0,0.4);
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
   }
 
   .modal-content {
@@ -219,39 +227,40 @@
   }
 
   .custom-dropdown {
-    position: relative;
-    display: inline-block;
-    width: 100%;
-  }
+  position: relative;
+  display: inline-block;
+  width: 100%; /* Adjust width based on your layout */
+}
 
-  #size-dropdown {
-    width: 100%;
-    padding: 10px 40px 10px 10px;
-    background-color: #fff;
-    border: 1px solid #000;
-    border-radius: 4px;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    font-size: 16px;
-    color: #333;
-    cursor: pointer;
-  }
+#size-dropdown {
+  width: 100%;
+  padding: 10px 40px 10px 10px; /* Adds padding, the second value is for the space on the right */
+  background-color: #fff; /* White background */
+  border: 1px solid #000; /* Thin black border */
+  border-radius: 4px; /* Slightly rounded corners */
+  appearance: none; /* Remove default dropdown styling */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  font-size: 16px; /* Adjust font size for modern look */
+  color: #333; /* Text color */
+  cursor: pointer;
+}
 
-  /* Style the dropdown arrow */
-  .custom-dropdown::after {
-    content: "▼";
-    font-size: 14px;
-    color: #000;
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-    background-color: #fff;
-    border-left: 1px solid #000;
-    padding: 10px;
-    pointer-events: none;
-  }
+/* Style the dropdown arrow (right square) */
+.custom-dropdown::after {
+  content: "▼"; /* Unicode arrow symbol */
+  font-size: 14px;
+  color: #000; /* Color of the arrow */
+  position: absolute;
+  top: 50%;
+  right: 10px; /* Adjust based on padding */
+  transform: translateY(-50%);
+  background-color: #fff; /* Same background color as dropdown */
+  border-left: 1px solid #000; /* Border on the left to create the square */
+  padding: 10px;
+  pointer-events: none; /* Prevent clicking on arrow */
+}
+
 
   /* Responsive adjustments */
   @media (max-width: 768px) {
@@ -263,6 +272,7 @@
       text-align: center;
       margin-bottom: 20px;
       font-size: 24px;
+      font-family: 'Lustria', sans-serif;
     }
 
     .product-grid {
@@ -273,62 +283,51 @@
 
 <script>
   function openModalFromElement(element) {
-    const productItem = element.closest('.product-item');
-    const productDataJson = productItem.getAttribute('data-product');
-    const product = JSON.parse(productDataJson);
-    openModal(product);
-  }
+  const productItem = element.closest('.product-item');
+  const productDataJson = productItem.getAttribute('data-product');
+  const product = JSON.parse(productDataJson);
+  openModal(product);
+}
 
-  function openModal(product) {
-    // Set product image
-    const imageUrl = product.images && product.images.length > 0 ? product.images[0].src : '';
-    document.getElementById('modal-image').src = imageUrl;
+function openModal(product) {
+  document.getElementById('modal-image').src = product.images[0] ? product.images[0].src : '';
+  document.getElementById('modal-title').innerText = product.title;
+  document.getElementById('modal-price').innerText = Shopify.formatMoney(product.price, "{{ shop.money_format }}");
+  document.getElementById('modal-description').innerText = product.description;
+  document.getElementById('orderModal').style.display = 'block';
 
-    // Set product title
-    document.getElementById('modal-title').innerText = product.title;
+  // Dynamically add the variant buttons
+  const variantContainer = document.querySelector('.color-flex');
+  variantContainer.innerHTML = ''; // Clear any existing buttons
 
-    // Set product price
-    document.getElementById('modal-price').innerText = Shopify.formatMoney(product.price, "{{ shop.money_format }}");
+  product.variants.forEach(variant => {
+    const button = document.createElement('button');
+    button.className = 'variant-btn';
+    button.dataset.color = variant.option2 ? variant.option2.toLowerCase() : '';
+    button.dataset.variantId = variant.id;
+    button.innerText = variant.option1; // Assuming option1 is the variant name
+    button.onclick = () => selectVariant(button, variant.id);
+    
+    // Set the border color to match the variant's color
+    button.style.borderColor = variant.option2 ? variant.option2.toLowerCase() : '#000';
 
-    // Set product description
-    document.getElementById('modal-description').innerText = product.description;
+    // Append the button to the variant container
+    variantContainer.appendChild(button);
+  });
+}
 
-    // Display the modal
-    document.getElementById('orderModal').style.display = 'block';
-
-    // Dynamically add the variant buttons
-    const variantContainer = document.querySelector('.color-flex');
-    variantContainer.innerHTML = ''; // Clear any existing buttons
-
-    if (product.variants && product.variants.length > 0) {
-      product.variants.forEach(variant => {
-        const button = document.createElement('button');
-        button.className = 'variant-btn';
-        button.dataset.color = variant.option2 ? variant.option2.toLowerCase() : '';
-        button.dataset.variantId = variant.id;
-        button.innerText = variant.option1 || 'Default';
-        button.onclick = () => selectVariant(button, variant.id);
-        
-        // Set the border color to match the variant's color
-        button.style.borderColor = variant.option2 ? variant.option2.toLowerCase() : '#000';
-
-        // Append the button to the variant container
-        variantContainer.appendChild(button);
-      });
-    }
-  }
 
   function selectVariant(button, variantId) {
     // Deselect all buttons
     const buttons = document.querySelectorAll('.variant-btn');
     buttons.forEach(btn => {
-      btn.style.backgroundColor = '';
-      btn.style.color = '';
+      btn.style.backgroundColor = '';  // Reset background color
+      btn.style.color = '';  // Reset text color
     });
     
     // Select the clicked button
-    button.style.backgroundColor = 'black';
-    button.style.color = 'white';
+    button.style.backgroundColor = 'black';  // Dark background when selected
+    button.style.color = 'white';  // White text when selected
 
     // Store the selected variant ID
     document.getElementById('selected-variant').value = variantId;
