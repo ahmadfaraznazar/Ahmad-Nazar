@@ -319,7 +319,7 @@
     document.getElementById('modal-price').innerText = formatMoney(product.price);
 
     // Set product description
-    document.getElementById('modal-description').innerText = product.description;
+    document.getElementById('modal-description').innerHTML = product.description;
 
     // Display the modal
     document.getElementById('orderModal').style.display = 'block';
